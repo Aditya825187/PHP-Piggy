@@ -19,7 +19,7 @@ class App
 
     if ($containerDefinitionsPath) {
       $containerDefinitions = include $containerDefinitionsPath;
-      $this->container->addDefinition($containerDefinitions);
+      $this->container->addDefinitions($containerDefinitions);
     }
   }
   public function run()
@@ -38,5 +38,10 @@ class App
   public function addMiddleware(string $middleware)
   {
     $this->router->addMiddleware($middleware);
+  }
+
+  public function post(string $path, array $controller)
+  {
+    $this->router->add('POST', $path, $controller);
   }
 }

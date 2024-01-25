@@ -5,34 +5,34 @@ declare(strict_types=1);
 namespace Framework;
 
 use ReflectionClass, ReflectionNamedType;
-use Framework\Exception\ContainerException;
+use Framework\Exceptions\ContainerException;
 
 class Container
 {
   private array $definitions = [];
   private array $resolved = [];
 
-  public function addDefinition(array $newDefinition)
+  public function addDefinitions(array $newDefinitions)
   {
-    $this->definitions = [...$this->definitions, ...$newDefinition];
+    $this->definitions = [...$this->definitions, ...$newDefinitions];
   }
-
 
   public function resolve(string $className)
   {
-    $reflectionclass = new ReflectionClass($className);
+    $reflectionClass = new ReflectionClass($className);
 
-    if (!$reflectionclass->isInstantiable()) {
+    if (!$reflectionClass->isInstantiable()) {
       throw new ContainerException("Class {$className} is not instantiable");
     }
 
-    $constructor = $reflectionclass->getConstructor();
+    $constructor = $reflectionClass->getConstructor();
 
     if (!$constructor) {
       return new $className;
     }
 
     $params = $constructor->getParameters();
+
     if (count($params) === 0) {
       return new $className;
     }
@@ -44,22 +44,23 @@ class Container
       $type = $param->getType();
 
       if (!$type) {
-        throw new ContainerException("Failed to resolve class {$className} is missing type of hint");
+        throw new ContainerException("Failed to resolve class {$className} because param {$name} is missing a type hint.");
       }
 
       if (!$type instanceof ReflectionNamedType || $type->isBuiltin()) {
-        throw new ContainerException("Failed to resolve class {$className} because invalid param name");
+        throw new ContainerException("Failed to resolve class {$className} because invalid param name.");
       }
+
+      $dependencies[] = $this->get($type->getName());
     }
 
-    $dependencies[] = $this->get($type->getName());
-    return $reflectionclass->newInstanceArgs($dependencies);
+    return $reflectionClass->newInstanceArgs($dependencies);
   }
 
   public function get(string $id)
   {
     if (!array_key_exists($id, $this->definitions)) {
-      throw new ContainerException("Class {$id} does not exits in container.");
+      throw new ContainerException("Class {$id} does not exist in container.");
     }
 
     if (array_key_exists($id, $this->resolved)) {
@@ -67,7 +68,7 @@ class Container
     }
 
     $factory = $this->definitions[$id];
-    $dependency = $factory();
+    $dependency = $factory($this);
 
     $this->resolved[$id] = $dependency;
 
