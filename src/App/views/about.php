@@ -11,6 +11,6 @@
   <!-- Escaping Data -->
   <p>Escaping Data:<?php echo e($dangersdata); ?> </p>
 </section>
-<?php include $this->resolve("partials/footer.php");
+<?php include $this->resolve("partials/_footer.php");
 ?>
 <!-- End Main Content Area -->

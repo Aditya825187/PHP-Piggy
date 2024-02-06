@@ -12,4 +12,4 @@ $db = new Database('mysql', [
 ], 'root', '1234');
 
 $sqlfile = file_get_contents("./database.sql");
-$db->connection->query($sqlfile);
+$db->query($sqlfile);

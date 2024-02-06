@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace App\Config;
 
 use Framework\App;
-use App\Middlewares\{FlashMiddleware, TemplateDataMiddleware, ValidationExceptionMiddleware, SessionMiddleware};
+use App\Middlewares\{FlashMiddleware, TemplateDataMiddleware, ValidationExceptionMiddleware, SessionMiddleware, CsrfTokenMiddleware, CsrfGuardMiddleware};
 
 function registermiddleware(App $app)
 {
+  $app->addMiddleware(CsrfGuardMiddleware::class);
+  $app->addMiddleware(CsrfTokenMiddleware::class);
   $app->addMiddleware(TemplateDataMiddleware::class);
   $app->addMiddleware(FlashMiddleware::class);
   $app->addMiddleware(SessionMiddleware::class);

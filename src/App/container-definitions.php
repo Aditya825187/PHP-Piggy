@@ -6,7 +6,7 @@ namespace App;
 
 use Framework\{Container, Templateengine, Database};
 use App\Config\Paths;
-use App\Services\{ValidatorService, UserService};
+use App\Services\{ValidatorService, UserService, TransactionService};
 
 return [
   TemplateEngine::class => fn () => new TemplateEngine(Paths::VIEW),
@@ -20,5 +20,11 @@ return [
     $db = $container->get(Database::class);
 
     return new UserService($db);
+  },
+  TransactionService::class => function (Container $container) {
+    $db = $container->get(Database::class);
+
+    return new TransactionService($db);
   }
+
 ];

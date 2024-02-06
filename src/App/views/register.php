@@ -95,5 +95,5 @@
 
 </section>
 
-<?php include $this->resolve("partials/footer.php");
+<?php include $this->resolve("partials/_footer.php");
 ?>
