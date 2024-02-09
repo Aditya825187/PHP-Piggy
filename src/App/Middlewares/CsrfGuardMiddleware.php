@@ -10,6 +10,7 @@ class CsrfGuardMiddleware implements MiddlewareInterface
 {
   public function process(callable $next)
   {
+
     $requestmethod = strtoupper($_SERVER['REQUEST_METHOD']);
     $validmethods = ['POST', 'PATCH', 'DELETE'];
 
