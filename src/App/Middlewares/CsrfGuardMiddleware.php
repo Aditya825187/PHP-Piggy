@@ -21,6 +21,7 @@ class CsrfGuardMiddleware implements MiddlewareInterface
 
     if ($_SESSION['token'] !== $_POST['token']) {
 
+
       redirectTo('/phpiggy/public/');
     }
 
